@@ -1,10 +1,23 @@
-﻿namespace TinderChatt
-{
-    internal class Program
+﻿namespace TinderChatt;
+using SocketIOClient;
+  
+
+  public class Program
     {
-        static void Main(string[] args)
+
+    private static SocketIO _chatClient;
+
+
+
+    static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+
+
+        var chat = new SocketService();
+
+        SocketService.ConnectToServer();
+
+
         }
     }
-}
+
