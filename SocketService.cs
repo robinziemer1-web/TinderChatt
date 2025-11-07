@@ -12,36 +12,40 @@ using SocketIOClient;
 
         private static SocketIO _chatClient;
         private static readonly string Path = "/sys25d";
-        public static List<string> messageHistory { get; set; }
+
+    //Stores all the received chat messages during the session.
+    public static List<string> messageHistory { get; set; } = new();
 
        async public static Task ConnectToServer()
         {
 
         var url = "wss://api.leetcode.se";
 
-        //Pathway /sys25d
-        var _chatClient = new SocketIO(url, new SocketIOOptions
+        //Initializing Socket.IO client and connecting to server.
+         _chatClient = new SocketIO(url, new SocketIOOptions
         {
 
             Path = Path
 
         });
-       
-        //Event name is "message".
-        //Response, getting a data from the servern and convert that to string.
+
+
+
+       //Listening on incoming messange from the event "message".
         _chatClient.On("message", response =>
         {
-           
             var incomingMessage = response.GetValue<string>();
 
             Console.WriteLine($"You got message: {incomingMessage}");
-
+       
         });
+
+
 
         _chatClient.OnConnected += (sender, args) =>
             {
 
-                Console.WriteLine("Connected!");
+                Console.WriteLine("Connecting...");
             };
 
         _chatClient.OnDisconnected += (sender, args) =>
@@ -50,10 +54,10 @@ using SocketIOClient;
             Console.WriteLine("Disconnected!");
         };
         
-        //Connecting to servern.
+        //await for the server connection to complete before continue.
         await _chatClient.ConnectAsync();
 
-        Console.WriteLine($"Connected {_chatClient.Connected}");
+        Console.WriteLine($"Connected {_chatClient.Connected}!");
 
     }
 
