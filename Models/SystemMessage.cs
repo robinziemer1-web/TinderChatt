@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace TinderChatt.Models
 {
-    internal class SystemMessage
+     public class SystemMessage : Message
     {
+   
+       public string EventInfo { get; set; }
+
+
+        public SystemMessage(string aEventInfo, string aName) : base(aName)
+        {
+
+            EventInfo = aEventInfo;
+        
+        }
+    
     }
 }
