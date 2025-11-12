@@ -21,7 +21,7 @@ using SocketIOClient;
 
         var url = "wss://api.leetcode.se";
 
-        //Initializing Socket.IO client and connecting to server.
+       
          _chatClient = new SocketIO(url, new SocketIOOptions
         {
 
