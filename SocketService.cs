@@ -1,13 +1,15 @@
 ﻿namespace TinderChatt;
+using SocketIOClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
-using SocketIOClient;
+using TinderChatt;
+using TinderChatt.Models;
 
-
-    public class SocketService
+public class SocketService
     {
 
         private static SocketIO _chatClient;
@@ -16,7 +18,13 @@ using SocketIOClient;
     //Stores all the received chat messages during the session.
     public static List<string> messageHistory { get; set; } = new();
 
-       async public static Task ConnectToServer()
+
+  
+      
+
+
+
+    async public static Task ConnectToServer(Message user)
         {
 
         var url = "wss://api.leetcode.se";
@@ -31,36 +39,60 @@ using SocketIOClient;
 
 
 
-       //Listening on incoming messange from the event "message".
-        _chatClient.On("message", response =>
-        {
-            var incomingMessage = response.GetValue<string>();
-
-            Console.WriteLine($"You got message: {incomingMessage}");
        
-        });
+        _chatClient.On("message", response =>
+ {
+
+       var incomingMessage = response.GetValue<Message>();
+
+            ConsoleUI.ShowEvent(incomingMessage);
+
+             });
 
 
 
-        _chatClient.OnConnected += (sender, args) =>
+        _chatClient.OnConnected += async (sender, args) =>
             {
 
                 Console.WriteLine("Connecting...");
-            };
+              
+  };
 
         _chatClient.OnDisconnected += (sender, args) =>
         {
 
             Console.WriteLine("Disconnected!");
         };
-        
+
         //await for the server connection to complete before continue.
-        await _chatClient.ConnectAsync();
+
+         await _chatClient.ConnectAsync();
+
+        await Task.Delay(2000);
+
 
         Console.WriteLine($"Connected {_chatClient.Connected}!");
-
     }
 
-    
+    public static async Task SendMessage(Message msg)
+    {
+        if (_chatClient == null || !_chatClient.Connected)
+        {
+            Console.WriteLine("You are not connected to server, please try again");
+            return;
+        }
+
+        await _chatClient.EmitAsync("message", new
+        {
+            name = msg.Name,
+            text = msg.Text,
+            timeStamp = msg.TimeStamp
+        });
+
+       
+        ConsoleUI.ShowEvent(msg);
     }
+
+
+}
 

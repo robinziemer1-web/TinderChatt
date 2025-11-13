@@ -1,8 +1,8 @@
 ﻿namespace TinderChatt;
 using SocketIOClient;
-  
+using TinderChatt.Models;
 
-  public class Program
+public class Program
     {
 
     
@@ -12,14 +12,57 @@ using SocketIOClient;
     async static Task Main(string[] args)
         {
 
+        var userName = "";
+        Console.WriteLine("Welcome to the TinderChatt Program!");
 
-        var chat = new SocketService();
+        while (true)
+        {
+            Console.Write("Write your username here: ");
+            userName = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(userName))
+            {
 
-        await SocketService.ConnectToServer();
+                Console.WriteLine("Error! You cant type empty name.");
 
+            }
 
-
+            else break;
 
         }
+        Message user = new Message(userName);
+
+        await SocketService.ConnectToServer(user);
+
+        while (true)
+        {
+
+            string textMessage = Console.ReadLine();
+
+
+
+
+            if (string.IsNullOrWhiteSpace(textMessage))
+                continue;
+
+            var message = new Message(userName)
+            {
+
+                Text = textMessage
+
+            };
+
+            await SocketService.SendMessage(message);
+
+        }
+
+
+
+
+
+
+
+
+
+    }
     }
 
