@@ -1,4 +1,6 @@
 ﻿namespace TinderChatt;
+
+using Microsoft.VisualBasic;
 using SocketIOClient;
 using System;
 using System.Collections.Generic;
@@ -38,10 +40,35 @@ public class SocketService
         });
 
 
-        _chatClient.On("message", response =>
+     
+
+        _chatClient.On("komapojkenMsg", response =>
         {
-            var incomingMessage = response.GetValue<Message>();
-            ConsoleUI.ShowEvent(incomingMessage);
+
+            Message incomingMessage = new Message();
+
+            try
+            {
+               incomingMessage = response.GetValue<Message>();
+                ConsoleUI.ShowEvent(incomingMessage);
+
+             
+            
+            } catch 
+            {
+
+                Console.WriteLine("Error! Could not deserialize a incoming message.");
+            
+            }
+
+            if (incomingMessage == null || incomingMessage.Name == null || incomingMessage.Text == null)
+            {
+
+                Console.WriteLine("Error! Invalid Message was received, with another datatype.");
+                return;
+
+            }
+
         });
 
 
