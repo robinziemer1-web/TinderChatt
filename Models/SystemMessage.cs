@@ -12,6 +12,13 @@ namespace TinderChatt.Models
        public string EventInfo { get; set; }
 
 
+        public SystemMessage() : base() 
+        {
+        
+
+        
+        }
+
         public SystemMessage(string aEventInfo, string aName) : base(aName)
         {
 

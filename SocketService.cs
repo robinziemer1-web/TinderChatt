@@ -19,18 +19,18 @@ public class SocketService
     public static List<string> messageHistory { get; set; } = new();
 
 
-  
-      
+
+
 
 
 
     async public static Task ConnectToServer(Message user)
-        {
+    {
 
         var url = "wss://api.leetcode.se";
 
-       
-         _chatClient = new SocketIO(url, new SocketIOOptions
+
+        _chatClient = new SocketIO(url, new SocketIOOptions
         {
 
             Path = Path
@@ -38,25 +38,38 @@ public class SocketService
         });
 
 
-
-       
         _chatClient.On("message", response =>
- {
-
-       var incomingMessage = response.GetValue<Message>();
-
+        {
+            var incomingMessage = response.GetValue<Message>();
             ConsoleUI.ShowEvent(incomingMessage);
+        });
 
-             });
 
 
 
         _chatClient.OnConnected += async (sender, args) =>
-            {
+        {
 
-                Console.WriteLine("Connecting...");
-              
-  };
+            Console.WriteLine($" {user.Name} Connecting...!");
+
+            var sysMsg = new SystemMessage
+            {
+                Name = "System",
+                EventInfo = $"{user.Name} has joined the chat",
+                TimeStamp = DateTime.Now
+            };
+
+            ConsoleUI.ShowEvent(sysMsg);
+
+            await _chatClient.EmitAsync("message", new
+            {
+                name = user.Name,
+                text = $"{user.Name} joined the chat",
+                timeStamp = DateTime.Now
+            });
+
+        };
+
 
         _chatClient.OnDisconnected += (sender, args) =>
         {
@@ -66,14 +79,18 @@ public class SocketService
 
         //await for the server connection to complete before continue.
 
-         await _chatClient.ConnectAsync();
+        await _chatClient.ConnectAsync();
 
         await Task.Delay(2000);
 
 
         Console.WriteLine($"Connected {_chatClient.Connected}!");
-    }
 
+      
+
+       
+        
+    }
     public static async Task SendMessage(Message msg)
     {
         if (_chatClient == null || !_chatClient.Connected)

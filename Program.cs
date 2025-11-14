@@ -31,6 +31,7 @@ public class Program
         }
         Message user = new Message(userName);
 
+
         await SocketService.ConnectToServer(user);
 
         while (true)
