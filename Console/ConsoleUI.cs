@@ -15,9 +15,15 @@ namespace TinderChatt
 
            if(ev is SystemMessage sysMsg) 
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                char lineChar = '\u2500';
 
+                string line = new string(lineChar, 40);
+                Console.WriteLine(line);
                 Console.WriteLine($"[{ev.TimeStamp:HH:mm}] {sysMsg.EventInfo}");
-            
+                Console.WriteLine(line);
+
+                Console.ResetColor();
             }
            else 
             {

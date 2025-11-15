@@ -39,11 +39,18 @@ public class Program
 
             string textMessage = Console.ReadLine();
 
-
-
-
             if (string.IsNullOrWhiteSpace(textMessage))
                 continue;
+
+            if(textMessage.Trim().ToLower() == "/quit") 
+            {
+                Console.WriteLine($"{userName} has left the chat.");
+                await SocketService.DisconnectFromServer(user);
+               
+                break;
+            
+            }
+            
 
             var message = new Message(userName)
             {
@@ -56,14 +63,6 @@ public class Program
 
         }
 
-
-
-
-
-
-
-
-
-    }
+ }
     }
 
