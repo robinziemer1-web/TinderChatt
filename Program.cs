@@ -1,4 +1,6 @@
 ﻿namespace TinderChatt;
+
+using Microsoft.VisualBasic;
 using SocketIOClient;
 using TinderChatt.Models;
 
@@ -17,6 +19,7 @@ public class Program
 
         while (true)
         {
+           
             Console.Write("Write your username here: ");
             userName = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(userName))
@@ -37,6 +40,9 @@ public class Program
         while (true)
         {
 
+            ConsoleUI.DrawInputPrompt();
+           
+           
             string textMessage = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(textMessage))
@@ -58,6 +64,8 @@ public class Program
                 Text = textMessage
 
             };
+
+            
 
             await SocketService.SendMessage(message);
 

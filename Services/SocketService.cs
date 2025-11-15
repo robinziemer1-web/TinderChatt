@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using TinderChatt;
 using TinderChatt.Models;
+using TinderChatt.Services;
 
 public class SocketService
     {
@@ -45,7 +46,7 @@ public class SocketService
         _chatClient.On("message", response =>
         {
 
-            Message incomingMessage = new Message();
+            var incomingMessage = new Message();
 
             try
             {
@@ -68,7 +69,16 @@ public class SocketService
                 return;
 
             }
+
+            
+            EventService.StoreEvent(incomingMessage);
+            ConsoleUI.ClearInputLine();
             ConsoleUI.ShowEvent(incomingMessage);
+            ConsoleUI.DrawInputPrompt();
+
+
+
+
 
         });
 
@@ -86,8 +96,15 @@ public class SocketService
                 TimeStamp = statusMsg.TimeStamp
 
             };
+            EventService.StoreEvent(sysMsg);
 
+            ConsoleUI.ClearInputLine();
+            
             ConsoleUI.ShowEvent(sysMsg);
+
+            ConsoleUI.DrawInputPrompt();
+
+         
 
         });
 
@@ -170,8 +187,8 @@ public class SocketService
             timeStamp = msg.TimeStamp
         });
 
-       
-        ConsoleUI.ShowEvent(msg);
+        ConsoleUI.ReplaceInputWithMessage(msg);
+
     }
 
 
