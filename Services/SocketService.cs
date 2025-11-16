@@ -51,9 +51,7 @@ public class SocketService
             try
             {
                incomingMessage = response.GetValue<Message>();
-               
-
-             
+            
             
             } catch 
             {
@@ -135,7 +133,9 @@ public class SocketService
 
         //await for the server connection to complete before continue.
 
+       
         await _chatClient.ConnectAsync();
+       
 
         await Task.Delay(2000);
 
@@ -165,7 +165,7 @@ public class SocketService
                }
                  await _chatClient.DisconnectAsync();
 
-        _chatClient.Dispose();
+             _chatClient.Dispose();
           
 
 
@@ -186,10 +186,13 @@ public class SocketService
             text = msg.Text,
             timeStamp = msg.TimeStamp
         });
-
+       
+        EventService.StoreEvent(msg);
         ConsoleUI.ReplaceInputWithMessage(msg);
 
     }
+
+  
 
 
 }

@@ -3,13 +3,10 @@
 using Microsoft.VisualBasic;
 using SocketIOClient;
 using TinderChatt.Models;
+using TinderChatt.Services;
 
 public class Program
     {
-
-    
-
-
 
     async static Task Main(string[] args)
         {
@@ -19,7 +16,7 @@ public class Program
 
         while (true)
         {
-           
+            
             Console.Write("Write your username here: ");
             userName = Console.ReadLine();
             if (string.IsNullOrWhiteSpace(userName))
@@ -34,43 +31,35 @@ public class Program
         }
         Message user = new Message(userName);
 
-
+        
         await SocketService.ConnectToServer(user);
+        ConsoleUI.DrawInputPrompt();
+
 
         while (true)
         {
-
             ConsoleUI.DrawInputPrompt();
-           
-           
             string textMessage = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(textMessage))
                 continue;
 
-            if(textMessage.Trim().ToLower() == "/quit") 
+          
+            if (textMessage.Equals("/quit", StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine($"{userName} has left the chat.");
                 await SocketService.DisconnectFromServer(user);
-               
-                break;
-            
+                Environment.Exit(0);
             }
-            
+         
 
-            var message = new Message(userName)
+            var message = new Message(user.Name)
             {
-
                 Text = textMessage
-
             };
 
-            
-
             await SocketService.SendMessage(message);
-
         }
 
- }
+    }
     }
 
