@@ -13,10 +13,10 @@ namespace TinderChatt
      public string Name { get; set; }
         [JsonPropertyName("text")]
         public string Text { get; set; } = "";
-        [JsonPropertyName("timeStamp")]
+        [JsonPropertyName("timestamp")]
         public DateTime TimeStamp { get; set; } = DateTime.Now;
-        [JsonIgnore]
-        public Guid Id { get; set; } = Guid.NewGuid();
+      
+        
 
         
         public Message() { } //Parameterless constructor for JSON deserialization in SocketService.

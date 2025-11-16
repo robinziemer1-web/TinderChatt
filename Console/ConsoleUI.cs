@@ -10,7 +10,7 @@ namespace TinderChatt
     public class ConsoleUI
     {
    
-     public static void ShowEvent(Message ev) 
+     public static void ShowEvent(Message ev)  //Prints a chat message or a system message.
         {
 
            if(ev is SystemMessage sysMsg) 
@@ -35,11 +35,17 @@ namespace TinderChatt
         
         }
 
+        
+
+    
+
+
+           //Make input prompt on the bottom of the console window.
         public static void DrawInputPrompt(string inputPrompt = "Write your message: ")
         {
             int bottom = Console.WindowHeight - 1;
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            
             char lineChar = '\u2500';
 
             string line = new string(lineChar, 40);
@@ -56,7 +62,7 @@ namespace TinderChatt
 
         
 
-        public static void ReplaceInputWithMessage(Message msg)
+        public static void ReplaceInputWithMessage(Message msg) //Replaces the users input line with formatted chat message.
         {
            
             int line = Console.CursorTop - 1;
@@ -66,18 +72,17 @@ namespace TinderChatt
             ClearLine(line);
             ShowEvent(msg);
         }
-
-        public static void ClearLine(int line)
+          
+        public static void ClearLine(int line)  //Overwriting console line with spaces.
         {
-
             
             Console.SetCursorPosition(0, line);
 
             Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, line);
             
-        }
-        public static void ClearInputLine() => ClearLine(Console.WindowHeight - 1);
+        }           
+        public static void ClearInputLine() => ClearLine(Console.WindowHeight - 1); //Clears the bottom input line.
 
     }
 }
